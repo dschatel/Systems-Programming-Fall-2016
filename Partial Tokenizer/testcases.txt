@@ -1,0 +1,106 @@
+1) Basic Functionality:
+
+Input:
+tokenizer "0700 1234 3.14159e10 324E5 0x0f 0\n"
+
+Output:
+Octal 0700
+Decimal 1234
+Float 3.14159e10
+Float 324E5
+Hexadecimal 0x0f
+Zero 0
+ERROR: Malformed [0x5c]
+ERROR: Malformed [0x6e]
+
+2) No Whitespace:
+
+Input:
+tokenizer "070012343.14159e10324E50x0f0\n"
+
+Output:
+Octal 070012343
+ERROR: Malformed [0x2e]
+Float 14159e10324
+ERROR: Malformed [0x45]
+Decimal 50
+ERROR: Malformed [0x78]
+Zero 0
+ERROR: Malformed [0x66]
+Zero 0
+ERROR: Malformed [0x5c]
+ERROR: Malformed [0x6e]
+
+3) Testing Hexadecimal:
+
+Input:
+tokenizer "0xff 0Xff  0x12345ABCDE 0xfq 0Xqq"
+
+Output:
+Hexadecimal 0xff
+Hexadecimal 0Xff
+Hexadecimal 0x12345ABCDE
+Hexadecimal 0xf
+ERROR: Malformed [0x71]
+Zero 0
+ERROR: Malformed [0x58]
+ERROR: Malformed [0x71]
+ERROR: Malformed [0x71]
+
+4) Testing Float:
+
+Input:
+tokenizer "324E5 3.24E5 324e+5 3.24e-5 324Eq 3.24Eq 324E+q 3.24e-q"
+
+Output:
+Float 324E5
+Float 3.24E5
+Float 324e+5
+Float 3.24e-5
+Decimal 324
+ERROR: Malformed [0x45]
+ERROR: Malformed [0x71]
+Float 3.24
+ERROR: Malformed [0x45]
+ERROR: Malformed [0x71]
+Decimal 324
+ERROR: Malformed [0x45]
+ERROR: Malformed [0x2b]
+ERROR: Malformed [0x71]
+Float 3.24
+ERROR: Malformed [0x65]
+ERROR: Malformed [0x2d]
+ERROR: Malformed [0x71]
+
+5) Testing Decimal Point:
+
+Input:
+tokenizer "123.45 0.12 0.2q 0.q2 123.q"
+
+Output:
+Float 123.45
+Float 0.12
+Float 0.2
+ERROR: Malformed [0x71]
+Zero 0
+ERROR: Malformed [0x2e]
+ERROR: Malformed [0x71]
+Decimal 2
+Decimal 123
+ERROR: Malformed [0x2e]
+ERROR: Malformed [0x71]
+
+6) Testing Escape Characters
+
+Input: tokenizer "0700\n1234\t0x345\v"
+
+Output:
+Octal 0700
+ERROR: Malformed [0x5c]
+ERROR: Malformed [0x5e]
+Decimal 1234
+ERROR: Malformed [0x5c]
+ERROR: Malformed [0x74]
+Hexadecimal 0x345
+ERROR: Malformed [0x5c]
+ERROR: Malformed [0x76]
