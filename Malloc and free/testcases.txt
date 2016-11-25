@@ -1,0 +1,12 @@
+testcases.txt
+Derek Schatel (dschatel) and Monica Ho (mwh66)
+==============================================
+
+Workload E:
+
+For this workload, we performed a malloc(0) five thousand times and also attempted to free that allocated space. Depending on the machine architecture, malloc(0) often exhibits different behaviors. This test is supposed to run malloc(0) to allow the user to understand such behavior when it comes to this particular implementation of malloc. The expected behavior is that malloc will return pointers to blocks of 2 (2 because malloc(0) will return 0 bytes but because there is always metadata of 2 bytes long those will take up space on the heap). When free is called, each call should free the metadata set up by a malloc.
+
+
+Workload F:
+
+For this workload, we performed a malloc(10000) three thousand times to simulate users trying to allocate more space than is available, which is a common issue when users need to manually handle memory as is typical of C programming. We then attempt to free the memory allocated by those mallocs. Ten thousand bytes is far above the capacity of the heap in this implementation of malloc and free. Therefore, the expected behavior is that malloc will report errors that there is not enough space to allocate these amounts, and the free command should also report errors for trying to free space that has not actually been allocated (since the mallocs did not go through).
